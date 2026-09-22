@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pgadmin-pvc
+  labels:
+    app: pg-admin
+    env: prod
+  namespace: ic-webapp
+spec:
+  storageClassName: ebs-gp3-sc
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

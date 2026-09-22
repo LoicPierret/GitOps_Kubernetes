@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: odoo
+  labels:
+    app: odoo
+    env: prod
+  namespace: ic-webapp
+spec:
+  type: ClusterIP
+  selector:
+    app: odoo
+  ports:
+    - protocol: TCP
+      port: 8069
+      targetPort: 8069

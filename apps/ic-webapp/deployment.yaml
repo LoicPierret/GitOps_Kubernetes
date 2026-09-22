@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    env: prod
+    app: ic-webapp
+  name: ic-webapp
+  namespace: ic-webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ic-webapp
+  template:
+    metadata:
+      labels:
+        app: ic-webapp
+    spec:
+      containers:
+        # TODO (phase 4 CI/CD) : remplacer ":latest" par un tag immuable
+        # (SHA du commit) écrit par la CI dans ce dépôt, indispensable en
+        # GitOps pour que Git reflète réellement la version déployée.
+        - image: azeriock/ic-webapp:latest
+          name: ic-webapp
+          env:
+            - name: ODOO_URL
+              value: "https://odoo.nuages.click"
+            - name: PGADMIN_URL
+              value: "https://pgadmin.nuages.click"
+          ports:
+            - containerPort: 8080
+              name: ic-webapp

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odoo
+  labels:
+    app: odoo
+    env: prod
+  namespace: ic-webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: odoo
+  template:
+    metadata:
+      labels:
+        app: odoo
+    spec:
+      securityContext:
+        fsGroup: 101
+        runAsUser: 101
+        runAsGroup: 101
+      containers:
+        - image: odoo
+          name: odoo
+          args: ["-i", "base"]
+          envFrom:
+            - configMapRef:
+                name: odoo-config
+          env:
+            - name: PGDATABASE
+              value: "odoo"
+            - name: PGSSLMODE
+              value: "require"
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  # Secret "odoo" (clé PASSWORD) : non défini dans ce dépôt
+                  # (public), voir apps/odoo/README.md pour la marche à
+                  # suivre en attendant la phase 3 (External Secrets).
+                  name: odoo
+                  key: PASSWORD
+          ports:
+            - containerPort: 8069
+              name: odoo
+          volumeMounts:
+            - name: lib-odoo-persistent-storage
+              mountPath: /var/lib/odoo
+      volumes:
+        - name: lib-odoo-persistent-storage
+          persistentVolumeClaim:
+            claimName: odoo-pvc
