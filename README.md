@@ -30,15 +30,21 @@ sans le déclarer.
 
 ## Secrets
 
-**Aucun secret n'est commité dans ce dépôt public.** Les applications `odoo`
-et `pgadmin` référencent des Secrets Kubernetes qui doivent exister dans le
-cluster avant leur premier démarrage :
+**Aucun secret n'est commité dans ce dépôt public.** Les Secrets Kubernetes
+`odoo` et `pgadmin-secret` sont créés automatiquement par [External Secrets
+Operator](https://external-secrets.io/) (installé par `terraform/app`,
+connecté à AWS Secrets Manager via un rôle IRSA scopé à ces deux secrets
+précis) :
 
-- voir [`apps/odoo/README.md`](apps/odoo/README.md)
-- voir [`apps/pgadmin/README.md`](apps/pgadmin/README.md)
+- `apps/odoo/external-secret.yaml` recopie le mot de passe RDS, généré et
+  géré nativement par AWS (`manage_master_user_password`) — jamais choisi ni
+  stocké par nous.
+- `apps/pgadmin/external-secret.yaml` recopie un mot de passe généré par
+  Terraform (`random_password`) et stocké dans Secrets Manager.
 
-Une phase ultérieure (External Secrets Operator + AWS Secrets Manager)
-automatisera cette étape sans changer les manifests des applications.
+Rien à faire manuellement au premier déploiement : les `ExternalSecret`
+créent les Secrets dès que le `ClusterSecretStore` (posé par
+`terraform/app`) est disponible.
 
 ## Accès à ArgoCD
 

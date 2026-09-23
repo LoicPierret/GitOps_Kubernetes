@@ -35,11 +35,13 @@ spec:
             - name: PASSWORD
               valueFrom:
                 secretKeyRef:
-                  # Secret "odoo" (clé PASSWORD) : non défini dans ce dépôt
-                  # (public), voir apps/odoo/README.md pour la marche à
-                  # suivre en attendant la phase 3 (External Secrets).
+                  # Secret "odoo" créé par l'ExternalSecret ci-contre
+                  # (external-secret.yaml), à partir du mot de passe RDS
+                  # géré par AWS (Secrets Manager). Clé "password" en
+                  # minuscule : nom du champ JSON du secret RDS, recopié tel
+                  # quel par External Secrets Operator (dataFrom.find).
                   name: odoo
-                  key: PASSWORD
+                  key: password
           ports:
             - containerPort: 8069
               name: odoo
