@@ -36,10 +36,8 @@ spec:
               valueFrom:
                 secretKeyRef:
                   # Secret "odoo" créé par l'ExternalSecret ci-contre
-                  # (external-secret.yaml), à partir du mot de passe RDS
-                  # géré par AWS (Secrets Manager). Clé "password" en
-                  # minuscule : nom du champ JSON du secret RDS, recopié tel
-                  # quel par External Secrets Operator (dataFrom.find).
+                  # (external-secret.yaml), à partir du champ "password" du
+                  # mot de passe RDS géré par AWS (Secrets Manager).
                   name: odoo
                   key: password
           ports:
