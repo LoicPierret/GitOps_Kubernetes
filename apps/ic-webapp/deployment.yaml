@@ -17,9 +17,9 @@ spec:
         app: ic-webapp
     spec:
       containers:
-        # TODO (phase 4 CI/CD) : remplacer ":latest" par un tag immuable
-        # (SHA du commit) écrit par la CI dans ce dépôt, indispensable en
-        # GitOps pour que Git reflète réellement la version déployée.
+        # Tag géré par la CI (.github/workflows/deploy.yml, job
+        # update-gitops) : écrit ici le SHA du commit à chaque déploiement.
+        # Ne pas éditer cette ligne à la main.
         - image: azeriock/ic-webapp:latest
           name: ic-webapp
           env:
