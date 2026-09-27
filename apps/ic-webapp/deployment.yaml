@@ -26,7 +26,7 @@ spec:
         # Tag géré par la CI (.github/workflows/deploy.yml, job
         # update-gitops) : écrit ici le SHA du commit à chaque déploiement.
         # Ne pas éditer cette ligne à la main.
-        - image: azeriock/ic-webapp:87a5bbd24cbb2123f7f060f6068cfd18b188e71f
+        - image: azeriock/ic-webapp:2da993e08726de69e07b15a54782b73b5d9e4a0e
           name: ic-webapp
           env:
             - name: ODOO_URL
