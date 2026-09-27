@@ -7,7 +7,13 @@ metadata:
   name: ic-webapp
   namespace: ic-webapp
 spec:
-  replicas: 1
+  # Plancher géré par le HorizontalPodAutoscaler (hpa.yaml) : ArgoCD ignore
+  # nativement les écarts sur spec.replicas quand un HPA cible la ressource,
+  # cette valeur ne sera donc pas réécrasée à chaque sync. 2 (pas 1) pour que
+  # le PodDisruptionBudget (pdb.yaml, minAvailable: 1) ait un sens réel —
+  # avec 1 seul replica, ce PDB bloquerait indéfiniment toute éviction
+  # volontaire (dont les consolidations Karpenter).
+  replicas: 2
   selector:
     matchLabels:
       app: ic-webapp
@@ -30,3 +36,13 @@ spec:
           ports:
             - containerPort: 8080
               name: ic-webapp
+          # Requêtes obligatoires pour que le HPA (hpa.yaml) puisse calculer
+          # un pourcentage d'utilisation CPU ; limits en garde-fou contre un
+          # emballement qui affamerait le nœud système.
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
