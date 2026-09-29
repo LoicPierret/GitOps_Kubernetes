@@ -56,10 +56,3 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 Puis ouvrir `https://localhost:8080` (utilisateur `admin`, mot de passe
 initial : `kubectl -n argocd get secret argocd-initial-admin-secret -o
 jsonpath='{.data.password}' | base64 -d`).
-
-## Limites connues
-
-- Les images `ic-webapp:latest` et `odoo` (sans tag) ne sont pas figées :
-  une future étape CI écrira un tag immuable (SHA du commit) dans ce dépôt.
-- L'Ingress partagé (`apps/platform`) référence des Services possédés par
-  d'autres `Application` : couplage volontaire pour ne garder qu'un seul ALB.
